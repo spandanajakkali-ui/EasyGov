@@ -7,14 +7,15 @@
 /* ================= FIREBASE ================= */
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCR5tRFRdbJaDCtES-Cu_xByPL5YLpBb0",
-    authDomain: "easygov-6f128.firebaseapp.com",
-    projectId: "easygov-6f128",
-    storageBucket: "easygov-6f128.firebasestorage.app",
-    messagingSenderId: "800864492965",
-    appId: "1:800864492965:web:83f763ece6b7927c99dc4c",
-    measurementId: "G-F5N1S9LNME"
+  apiKey: "AIzaSyC8CCFdM6hUCBww1hJacJA5rUTUmkrpYlg",
+  authDomain: "easygov-44a8a.firebaseapp.com",
+  projectId: "easygov-44a8a",
+  storageBucket: "easygov-44a8a.firebasestorage.app",
+  messagingSenderId: "16198895275",
+  appId: "1:16198895275:web:804e178f5be07c3fbc19ee",
+  measurementId: "G-V6ZC73RPN6"
 };
+
 
 firebase.initializeApp(firebaseConfig);
 
