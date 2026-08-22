@@ -160,31 +160,6 @@
             </div>
 
         </div>
-        <div class="preference">
-
-    <h3>📷 Document Snap-to-Form</h3>
-
-    <p>
-        Upload or capture a document and EasyGov will
-        automatically extract information and fill the form.
-    </p>
-
-    <input
-        type="file"
-        id="documentInput"
-        accept="image/*"
-        capture="environment"
-        hidden
-        onchange="processDocument()"
-    >
-
-    <button onclick="document.getElementById('documentInput').click()">
-        📷 Scan Document
-    </button>
-
-    <div id="ocrStatus" class="ocr-status"></div>
-
-</div>
 
     </div>
 
@@ -257,6 +232,31 @@
             </div>
 
         </div>
+      <div class="preference">
+
+    <h3>📷 Document Snap-to-Form</h3>
+
+    <p>
+        Upload or capture a document and EasyGov will
+        automatically extract information and fill the form.
+    </p>
+
+    <input
+        type="file"
+        id="documentInput"
+        accept="image/*"
+        capture="environment"
+        hidden
+        onchange="processDocument()"
+    >
+
+    <button onclick="document.getElementById('documentInput').click()">
+        📷 Scan Document
+    </button>
+
+    <div id="ocrStatus" class="ocr-status"></div>
+
+</div>
 
 
         <div class="navigation">
@@ -503,8 +503,9 @@
     </div>
 
 </div>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
 <script src="script.js"></script>
 
 </body>
