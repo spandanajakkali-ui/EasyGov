@@ -1422,3 +1422,124 @@ function getEasyGovResponse(message) {
         : "I'm here to help with EasyGov. You can ask me about language, Read Aloud, text size, contrast, or completing the application.";
 
 }
+async function processDocument() {
+
+    const input = document.getElementById("documentInput");
+    const status = document.getElementById("ocrStatus");
+
+    if (!input.files || !input.files[0]) {
+        return;
+    }
+
+    const file = input.files[0];
+
+    status.innerHTML = "🔄 Reading document... Please wait.";
+
+    try {
+
+        const result = await Tesseract.recognize(
+            file,
+            "eng",
+            {
+                logger: function(info) {
+
+                    if (info.status === "recognizing text") {
+
+                        const progress =
+                            Math.round(info.progress * 100);
+
+                        status.innerHTML =
+                            `🔄 Reading document... ${progress}%`;
+
+                    }
+
+                }
+            }
+        );
+
+        const text = result.data.text;
+
+        console.log("OCR TEXT:", text);
+
+        const extractedData = extractDocumentFields(text);
+
+        window.ocrData = extractedData;
+
+        status.innerHTML =
+            "✅ Document read successfully! Information extracted.";
+
+        alert(
+            "Document scanned successfully!\n\n" +
+            "Name: " + (extractedData.name || "Not found") +
+            "\nDOB: " + (extractedData.dob || "Not found") +
+            "\nAddress: " + (extractedData.address || "Not found")
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        status.innerHTML =
+            "❌ Could not read the document. Please try a clearer image.";
+
+    }
+}
+function extractDocumentFields(text) {
+
+    const lines = text
+        .split("\n")
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+
+    let name = "";
+    let dob = "";
+    let address = "";
+
+    // Find name
+    for (let line of lines) {
+
+        if (/name/i.test(line)) {
+
+            name = line
+                .replace(/name\s*[:\-]?\s*/i, "")
+                .trim();
+
+            if (name.length > 2) {
+                break;
+            }
+        }
+    }
+
+    // Find date of birth
+    const dobMatch = text.match(
+        /\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b/
+    );
+
+    if (dobMatch) {
+        dob = dobMatch[0];
+    }
+
+    // Find address
+    for (let i = 0; i < lines.length; i++) {
+
+        if (/address/i.test(lines[i])) {
+
+            address = lines[i]
+                .replace(/address\s*[:\-]?\s*/i, "")
+                .trim();
+
+            // If address is empty, use next line
+            if (!address && lines[i + 1]) {
+                address = lines[i + 1];
+            }
+
+            break;
+        }
+    }
+
+    return {
+        name: name,
+        dob: dob,
+        address: address
+    };
+}
