@@ -5,24 +5,20 @@
 
 
 /* ================= FIREBASE ================= */
-/* ================= FIREBASE ================= */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCR5tRFRdbJaDCtES-Cu_xByPL5YLpBb0",
-  authDomain: "easygov-6f128.firebaseapp.com",
-  projectId: "easygov-6f128",
-  storageBucket: "easygov-6f128.appspot.com",   // ✅ Corrected
-  messagingSenderId: "800864492965",
-  appId: "1:800864492965:web:83f763ece6b7927c99dc4c",
-  measurementId: "G-F5N1S9LNME"
+    apiKey: "AIzaSyCR5tRFRdbJaDCtES-Cu_xByPL5YLpBb0",
+    authDomain: "easygov-6f128.firebaseapp.com",
+    projectId: "easygov-6f128",
+    storageBucket: "easygov-6f128.firebasestorage.app",
+    messagingSenderId: "800864492965",
+    appId: "1:800864492965:web:83f763ece6b7927c99dc4c",
+    measurementId: "G-F5N1S9LNME"
 };
 
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
-
-
-
 
 
 /* ================= GLOBAL VARIABLES ================= */
