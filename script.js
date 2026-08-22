@@ -1150,3 +1150,275 @@ document.addEventListener("DOMContentLoaded", function() {
     currentLanguage = "en";
 
 });
+// =====================================================
+// EASYGOV AI ASSISTANT - CHATBOT
+// =====================================================
+
+function toggleChat() {
+
+    const chatbot = document.getElementById("chatbot");
+
+    chatbot.classList.toggle("active");
+
+}
+
+
+// -----------------------------------------------------
+// Send message
+// -----------------------------------------------------
+
+function sendChatMessage() {
+
+    const input =
+        document.getElementById("chatInput");
+
+    const message =
+        input.value.trim();
+
+
+    if (!message) {
+        return;
+    }
+
+
+    // Show user's message
+
+    addChatMessage(
+        message,
+        "user"
+    );
+
+
+    input.value = "";
+
+
+    // Get assistant response
+
+    const response =
+        getEasyGovResponse(message);
+
+
+    // Small delay so it feels like an assistant
+
+    setTimeout(function() {
+
+        addChatMessage(
+            response,
+            "bot"
+        );
+
+    }, 400);
+
+}
+
+
+// -----------------------------------------------------
+// Add message to chat
+// -----------------------------------------------------
+
+function addChatMessage(message, type) {
+
+    const container =
+        document.getElementById("chatMessages");
+
+
+    const messageDiv =
+        document.createElement("div");
+
+
+    messageDiv.className =
+        type === "user"
+            ? "user-message"
+            : "bot-message";
+
+
+    messageDiv.innerText =
+        message;
+
+
+    container.appendChild(messageDiv);
+
+
+    container.scrollTop =
+        container.scrollHeight;
+
+}
+
+
+// -----------------------------------------------------
+// EasyGov Assistant knowledge
+// -----------------------------------------------------
+
+function getEasyGovResponse(message) {
+
+    const text =
+        message.toLowerCase();
+
+
+    // LANGUAGE
+
+    if (
+        text.includes("kannada") ||
+        text.includes("language") ||
+        text.includes("ಕನ್ನಡ")
+    ) {
+
+        if (currentLanguage === "kn") {
+
+            return "ಕನ್ನಡ ಭಾಷೆಯನ್ನು ಬಳಸಲು ಮೇಲಿನ ಕನ್ನಡ ಬಟನ್ ಅನ್ನು ಆಯ್ಕೆಮಾಡಿ.";
+
+        }
+
+        return "You can switch to Kannada by clicking the ಕನ್ನಡ button at the top of the page.";
+
+    }
+
+
+    // READ ALOUD
+
+    if (
+        text.includes("read") ||
+        text.includes("listen") ||
+        text.includes("hear") ||
+        text.includes("speak")
+    ) {
+
+        return currentLanguage === "kn"
+
+            ? "🔊 ಸೂಚನೆಗಳನ್ನು ಕೇಳಲು Read Aloud ಬಟನ್ ಅನ್ನು ಒತ್ತಿರಿ."
+
+            : "🔊 Use the Read Aloud button to listen to the instructions instead of reading them.";
+
+    }
+
+
+    // TEXT SIZE
+
+    if (
+        text.includes("text size") ||
+        text.includes("font") ||
+        text.includes("small text") ||
+        text.includes("big text")
+    ) {
+
+        return currentLanguage === "kn"
+
+            ? "🔤 A+ ಬಟನ್ ಒತ್ತಿದರೆ ಪಠ್ಯದ ಗಾತ್ರ ಹೆಚ್ಚಾಗುತ್ತದೆ. A− ಬಟನ್ ಒತ್ತಿದರೆ ಗಾತ್ರ ಕಡಿಮೆಯಾಗುತ್ತದೆ."
+
+            : "🔤 Use A+ to increase the text size and A− to decrease it.";
+
+    }
+
+
+    // CONTRAST
+
+    if (
+        text.includes("contrast") ||
+        text.includes("see") ||
+        text.includes("visibility") ||
+        text.includes("visible")
+    ) {
+
+        return currentLanguage === "kn"
+
+            ? "👁️ ಪಠ್ಯವನ್ನು ಹೆಚ್ಚು ಸ್ಪಷ್ಟವಾಗಿ ನೋಡಲು Contrast ಬಟನ್ ಅನ್ನು ಬಳಸಿ."
+
+            : "👁️ If the text is difficult to see, use the Contrast button to improve visibility.";
+
+    }
+
+
+    // FORM HELP
+
+    if (
+        text.includes("form") ||
+        text.includes("application") ||
+        text.includes("fill") ||
+        text.includes("next")
+    ) {
+
+        return currentLanguage === "kn"
+
+            ? "📝 ಪ್ರತಿ ಹಂತದಲ್ಲಿರುವ ಪ್ರಶ್ನೆಗೆ ಉತ್ತರಿಸಿ ಮತ್ತು Next ಬಟನ್ ಒತ್ತಿ ಮುಂದುವರಿಯಿರಿ."
+
+            : "📝 Answer the question shown on the screen and click Next to continue.";
+
+    }
+
+
+    // WRONG ANSWER
+
+    if (
+        text.includes("wrong") ||
+        text.includes("mistake") ||
+        text.includes("change") ||
+        text.includes("edit")
+    ) {
+
+        return currentLanguage === "kn"
+
+            ? "↩️ ಹಿಂದಿನ ಪ್ರಶ್ನೆಗೆ ಹೋಗಲು Back ಬಟನ್ ಒತ್ತಿ ಮತ್ತು ನಿಮ್ಮ ಉತ್ತರವನ್ನು ಬದಲಾಯಿಸಿ."
+
+            : "↩️ Click Back to return to the previous question and correct your answer.";
+
+    }
+
+
+    // WHAT IS EASYGOV
+
+    if (
+        text.includes("what is easygov") ||
+        text.includes("easygov")
+    ) {
+
+        return currentLanguage === "kn"
+
+            ? "🏛️ EasyGov ಒಂದು ಸರಳ ಮತ್ತು ಸುಲಭವಾಗಿ ಬಳಸಬಹುದಾದ ಸರ್ಕಾರಿ ಸೇವೆಗಳ ಮಾರ್ಗದರ್ಶಿ ವೇದಿಕೆಯಾಗಿದೆ."
+
+            : "🏛️ EasyGov is designed to make government services easier to understand and use.";
+
+    }
+
+
+    // HELP
+
+    if (
+        text.includes("help") ||
+        text.includes("how")
+    ) {
+
+        return currentLanguage === "kn"
+
+            ? "ನಾನು ಭಾಷೆ, Read Aloud, ಪಠ್ಯದ ಗಾತ್ರ, Contrast ಮತ್ತು ಅರ್ಜಿ ತುಂಬುವ ಬಗ್ಗೆ ಸಹಾಯ ಮಾಡಬಹುದು."
+
+            : "I can help you with language, Read Aloud, text size, contrast, and completing the application.";
+
+    }
+
+
+    // GREETING
+
+    if (
+        text.includes("hello") ||
+        text.includes("hi") ||
+        text.includes("hey")
+    ) {
+
+        return currentLanguage === "kn"
+
+            ? "👋 ನಮಸ್ಕಾರ! EasyGov ನಲ್ಲಿ ನಿಮಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಹುದು?"
+
+            : "👋 Hello! How can I help you use EasyGov?";
+
+    }
+
+
+    // DEFAULT
+
+    return currentLanguage === "kn"
+
+        ? "ಕ್ಷಮಿಸಿ, ನನಗೆ ಆ ಪ್ರಶ್ನೆ ಅರ್ಥವಾಗಲಿಲ್ಲ. ಭಾಷೆ, Read Aloud, ಪಠ್ಯದ ಗಾತ್ರ, Contrast ಅಥವಾ ಅರ್ಜಿ ಬಗ್ಗೆ ಕೇಳಿ."
+
+        : "I'm here to help with EasyGov. You can ask me about language, Read Aloud, text size, contrast, or completing the application.";
+
+}
