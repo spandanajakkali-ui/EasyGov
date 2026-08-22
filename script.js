@@ -11,7 +11,7 @@ const firebaseConfig = {
     authDomain: "easygov-6f128.firebaseapp.com",
     projectId: "easygov-6f128",
     
-   storageBucket: "easygov-6f128.appspot.com",
+   storageBucket: "easygov-6f128.firebasestorage.app",
 
     messagingSenderId: "800864492965",
     appId: "1:800864492965:web:83f763ece6b7927c99dc4c",
