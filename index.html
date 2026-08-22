@@ -434,6 +434,51 @@
 
 </footer>
 
+    <!-- ================= AI ASSISTANT ================= -->
+
+<button id="chatToggle" class="chat-toggle" onclick="toggleChat()">
+    🤖 EasyGov AI
+</button>
+
+<div id="chatbot" class="chatbot">
+
+    <div class="chat-header">
+        <div>
+            <strong>🤖 EasyGov Assistant</strong>
+            <small>Accessibility Help</small>
+        </div>
+
+        <button onclick="toggleChat()" class="chat-close">
+            ✕
+        </button>
+    </div>
+
+    <div id="chatMessages" class="chat-messages">
+
+        <div class="bot-message">
+            👋 Hello! I'm the EasyGov Assistant.<br><br>
+            I can help you understand the form and accessibility features.
+        </div>
+
+    </div>
+
+    <div class="chat-input-area">
+
+        <input
+            type="text"
+            id="chatInput"
+            placeholder="Ask me something..."
+            onkeydown="if(event.key === 'Enter') sendChatMessage()"
+        >
+
+        <button onclick="sendChatMessage()" class="chat-send">
+            ➤
+        </button>
+
+    </div>
+
+</div>
+
 
 <script src="script.js"></script>
 
