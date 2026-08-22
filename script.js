@@ -689,44 +689,15 @@ function toggleContrast() {
 // READ ALOUD
 // =====================================================
 
-function speak(text) {
+function speakText(text) {
+
     if (!("speechSynthesis" in window)) {
+
         alert("Read Aloud is not supported in this browser.");
+
         return;
+
     }
-
-    speechSynthesis.cancel();
-
-    let speech = new SpeechSynthesisUtterance(text);
-
-    // Load voices properly (some browsers delay this)
-    let voices = speechSynthesis.getVoices();
-    if (!voices.length) {
-        speechSynthesis.onvoiceschanged = () => {
-            voices = speechSynthesis.getVoices();
-        };
-    }
-
-    if (currentLanguage === "kn") {
-        speech.lang = "kn-IN";
-
-        // Try to find a Kannada voice
-        let kannadaVoice = voices.find(v => v.lang.toLowerCase().includes("kn"));
-        if (kannadaVoice) {
-            speech.voice = kannadaVoice;
-        }
-    } else {
-        speech.lang = "en-US";
-
-        // Try to find an English voice
-        let englishVoice = voices.find(v => v.lang.toLowerCase().startsWith("en"));
-        if (englishVoice) {
-            speech.voice = englishVoice;
-        }
-    }
-
-    speechSynthesis.speak(speech);
-}
 
 
     window.speechSynthesis.cancel();
