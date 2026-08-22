@@ -8,410 +8,434 @@
     <title>EasyGov - Accessible Government Services</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 </head>
 
 <body>
 
-    <!-- ================= HEADER ================= -->
+<header class="header">
 
-    <header class="header">
+    <div class="logo">
+        🏛️ <span>EasyGov</span>
+    </div>
 
-        <div class="logo">
-            🏛️ <span id="appName">EasyGov</span>
-        </div>
+    <div class="header-controls">
 
-        <div class="header-controls">
+        <button onclick="setLanguage('en')">English</button>
 
-            <button onclick="setLanguage('en')">
-                English
-            </button>
+        <button onclick="setLanguage('kn')">ಕನ್ನಡ</button>
 
-            <button onclick="setLanguage('kn')">
-                ಕನ್ನಡ
-            </button>
+        <button onclick="toggleContrast()" id="contrastBtn">
+            🌓 Contrast
+        </button>
 
-            <button onclick="toggleContrast()" id="contrastBtn">
-                🌓 Contrast
-            </button>
+        <button onclick="logout()" id="logoutButton" class="logout-btn">
+            Logout
+        </button>
 
-        </div>
+    </div>
 
-    </header>
+</header>
 
 
-    <!-- ================= MAIN ================= -->
+<main>
 
-    <main>
+<!-- ================= LOGIN ================= -->
 
+<section id="loginScreen" class="screen active">
 
-        <!-- ============ HOME SCREEN ============ -->
+    <div class="card auth-card">
 
-        <section id="homeScreen" class="screen active">
+        <div class="hero-icon">🏛️</div>
 
-            <div class="hero">
+        <h1 id="loginTitle">Welcome to EasyGov</h1>
 
-                <div class="hero-icon">
-                    🏛️
-                </div>
-
-                <h1 id="homeTitle">
-                    Government Services,
-                    Made Easier for Everyone
-                </h1>
-
-                <p id="homeDescription">
-                    Complete government forms with simple,
-                    step-by-step guidance designed for everyone.
-                </p>
-
-                <button
-                    class="primary-button"
-                    onclick="startApplication()"
-                    id="startButton">
-
-                    🚀 Start Application
-
-                </button>
-
-                <div class="accessibility-panel">
-
-                    <h3 id="accessibilityTitle">
-                        Accessibility Options
-                    </h3>
-
-                    <button onclick="readCurrentPage()">
-                        🔊 Read Aloud
-                    </button>
-
-                    <div class="text-controls">
-
-                        <span>🔤 Text Size</span>
-
-                        <button onclick="changeTextSize(-1)">
-                            A−
-                        </button>
-
-                        <button onclick="resetTextSize()">
-                            A
-                        </button>
-
-                        <button onclick="changeTextSize(1)">
-                            A+
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ============ PREFERENCES SCREEN ============ -->
-
-        <section id="preferencesScreen" class="screen">
-
-            <div class="card">
-
-                <div class="step-number">
-                    1
-                </div>
-
-                <h2 id="preferencesTitle">
-                    Personalise Your Experience
-                </h2>
-
-                <p id="preferencesDescription">
-                    Choose the options that make this website
-                    easier for you to use.
-                </p>
-
-
-                <div class="preference">
-
-                    <h3>🌐 Language</h3>
-
-                    <div class="option-row">
-
-                        <button onclick="setLanguage('en')">
-                            English
-                        </button>
-
-                        <button onclick="setLanguage('kn')">
-                            ಕನ್ನಡ
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="preference">
-
-                    <h3>🔊 Read Aloud</h3>
-
-                    <p id="readDescription">
-                        Listen to instructions instead of
-                        reading them.
-                    </p>
-
-                    <button onclick="readCurrentPage()">
-                        🔊 Read This Page
-                    </button>
-
-                </div>
-
-
-                <div class="preference">
-
-                    <h3>🔤 Text Size</h3>
-
-                    <div class="option-row">
-
-                        <button onclick="changeTextSize(-1)">
-                            A−
-                        </button>
-
-                        <button onclick="resetTextSize()">
-                            Normal
-                        </button>
-
-                        <button onclick="changeTextSize(1)">
-                            A+
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="navigation">
-
-                    <button onclick="showScreen('homeScreen')">
-                        ← Back
-                    </button>
-
-                    <button
-                        class="primary-button"
-                        onclick="beginForm()"
-                        id="continueButton">
-
-                        Continue →
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ============ FORM SCREEN ============ -->
-
-        <section id="formScreen" class="screen">
-
-            <div class="card">
-
-                <div class="progress-container">
-
-                    <div class="progress-info">
-
-                        <span id="stepText">
-                            Step 1 of 6
-                        </span>
-
-                        <span id="progressPercent">
-                            17%
-                        </span>
-
-                    </div>
-
-                    <div class="progress-bar">
-
-                        <div
-                            id="progressFill"
-                            class="progress-fill">
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-question">
-
-                    <div
-                        class="question-icon"
-                        id="questionIcon">
-                        👤
-                    </div>
-
-                    <h2 id="questionTitle">
-                        What is your full name?
-                    </h2>
-
-                    <p id="questionDescription">
-                        Enter your name as it appears
-                        on your official document.
-                    </p>
-
-                    <button
-                        class="listen-button"
-                        onclick="readQuestion()">
-
-                        🔊 Listen
-
-                    </button>
-
-
-                    <div id="inputContainer">
-
-                        <input
-                            id="formInput"
-                            type="text"
-                            placeholder="Enter your full name">
-
-                    </div>
-
-                </div>
-
-
-                <div class="navigation">
-
-                    <button
-                        onclick="previousQuestion()"
-                        id="backButton">
-
-                        ← Back
-
-                    </button>
-
-                    <button
-                        class="primary-button"
-                        onclick="nextQuestion()"
-                        id="nextButton">
-
-                        Next →
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ============ REVIEW SCREEN ============ -->
-
-        <section id="reviewScreen" class="screen">
-
-            <div class="card">
-
-                <div class="success-icon">
-                    🔍
-                </div>
-
-                <h2 id="reviewTitle">
-                    Review Your Information
-                </h2>
-
-                <p id="reviewDescription">
-                    Please check your answers before completing.
-                </p>
-
-                <div id="reviewContainer">
-                </div>
-
-                <div class="navigation">
-
-                    <button onclick="showScreen('formScreen')">
-                        ← Edit
-                    </button>
-
-                    <button
-                        class="primary-button"
-                        onclick="completeApplication()"
-                        id="completeButton">
-
-                        ✓ Complete
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ============ COMPLETE SCREEN ============ -->
-
-        <section id="completeScreen" class="screen">
-
-            <div class="card completion-card">
-
-                <div class="success-icon">
-                    ✅
-                </div>
-
-                <h1 id="completeTitle">
-                    Guided Form Completed!
-                </h1>
-
-                <p id="completeDescription">
-                    You have successfully completed
-                    all the required information.
-                </p>
-
-                <div class="important-note">
-
-                    ℹ️
-
-                    <span id="noteText">
-                        This prototype demonstrates an
-                        accessible guided form. Users can
-                        proceed to the official government
-                        portal for actual submission.
-                    </span>
-
-                </div>
-
-                <button
-                    class="primary-button"
-                    onclick="restartApplication()">
-
-                    🔄 Start Again
-
-                </button>
-
-            </div>
-
-        </section>
-
-
-    </main>
-
-
-    <!-- ================= FOOTER ================= -->
-
-    <footer>
-
-        <p>
-            EasyGov — Accessible Digital Government Services
+        <p id="loginDescription">
+            Sign in to access accessible government services.
         </p>
 
-    </footer>
+        <div id="authMessage" class="auth-message"></div>
+
+        <label for="email" id="emailLabel">
+            Email
+        </label>
+
+        <input
+            id="email"
+            type="email"
+            placeholder="Enter your email"
+        >
+
+        <label for="password" id="passwordLabel">
+            Password
+        </label>
+
+        <input
+            id="password"
+            type="password"
+            placeholder="Enter your password"
+        >
+
+        <button
+            class="primary-button full-button"
+            onclick="loginUser()"
+            id="loginButton">
+
+            🔐 Login
+
+        </button>
+
+        <button
+            class="full-button"
+            onclick="registerUser()"
+            id="registerButton">
+
+            Create Account
+
+        </button>
+
+        <button
+            class="link-button"
+            onclick="showDemoWithoutLogin()">
+
+            Continue Demo
+
+        </button>
+
+    </div>
+
+</section>
 
 
-    <script src="script.js"></script>
+<!-- ================= HOME ================= -->
+
+<section id="homeScreen" class="screen">
+
+    <div class="hero">
+
+        <div class="hero-icon">🏛️</div>
+
+        <h1 id="homeTitle">
+            Government Services, Made Easier for Everyone
+        </h1>
+
+        <p id="homeDescription">
+            Complete government forms with simple,
+            step-by-step guidance designed for everyone.
+        </p>
+
+        <button
+            class="primary-button"
+            onclick="startApplication()"
+            id="startButton">
+
+            🚀 Start Application
+
+        </button>
+
+
+        <div class="accessibility-panel">
+
+            <h3 id="accessibilityTitle">
+                Accessibility Options
+            </h3>
+
+            <button onclick="readCurrentPage()">
+                🔊 Read Aloud
+            </button>
+
+            <div class="text-controls">
+
+                <span>🔤 Text Size</span>
+
+                <button onclick="changeTextSize(-1)">A−</button>
+
+                <button onclick="resetTextSize()">A</button>
+
+                <button onclick="changeTextSize(1)">A+</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PREFERENCES ================= -->
+
+<section id="preferencesScreen" class="screen">
+
+    <div class="card">
+
+        <div class="step-number">1</div>
+
+        <h2 id="preferencesTitle">
+            Personalise Your Experience
+        </h2>
+
+        <p id="preferencesDescription">
+            Choose the options that make this website easier for you to use.
+        </p>
+
+
+        <div class="preference">
+
+            <h3>🌐 Language</h3>
+
+            <div class="option-row">
+
+                <button onclick="setLanguage('en')">
+                    English
+                </button>
+
+                <button onclick="setLanguage('kn')">
+                    ಕನ್ನಡ
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="preference">
+
+            <h3>🔊 Read Aloud</h3>
+
+            <p id="readDescription">
+                Listen to instructions instead of reading them.
+            </p>
+
+            <button onclick="readCurrentPage()">
+                🔊 Read This Page
+            </button>
+
+        </div>
+
+
+        <div class="preference">
+
+            <h3>🔤 Text Size</h3>
+
+            <div class="option-row">
+
+                <button onclick="changeTextSize(-1)">A−</button>
+
+                <button onclick="resetTextSize()">Normal</button>
+
+                <button onclick="changeTextSize(1)">A+</button>
+
+            </div>
+
+        </div>
+
+
+        <div class="navigation">
+
+            <button onclick="showScreen('homeScreen')">
+                ← Back
+            </button>
+
+            <button
+                class="primary-button"
+                onclick="beginForm()"
+                id="continueButton">
+
+                Continue →
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FORM ================= -->
+
+<section id="formScreen" class="screen">
+
+    <div class="card">
+
+        <div class="progress-container">
+
+            <div class="progress-info">
+
+                <span id="stepText">
+                    Step 1 of 6
+                </span>
+
+                <span id="progressPercent">
+                    17%
+                </span>
+
+            </div>
+
+            <div class="progress-bar">
+
+                <div
+                    id="progressFill"
+                    class="progress-fill">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-question">
+
+            <div
+                class="question-icon"
+                id="questionIcon">
+                👤
+            </div>
+
+            <h2 id="questionTitle">
+                What is your full name?
+            </h2>
+
+            <p id="questionDescription">
+                Enter your name as it appears on your official document.
+            </p>
+
+            <button
+                class="listen-button"
+                onclick="readQuestion()">
+
+                🔊 Listen
+
+            </button>
+
+            <div id="inputContainer"></div>
+
+        </div>
+
+
+        <div class="navigation">
+
+            <button
+                onclick="previousQuestion()"
+                id="backButton">
+
+                ← Back
+
+            </button>
+
+            <button
+                class="primary-button"
+                onclick="nextQuestion()"
+                id="nextButton">
+
+                Next →
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= REVIEW ================= -->
+
+<section id="reviewScreen" class="screen">
+
+    <div class="card">
+
+        <div class="success-icon">🔍</div>
+
+        <h2 id="reviewTitle">
+            Review Your Information
+        </h2>
+
+        <p id="reviewDescription">
+            Please check your answers before completing.
+        </p>
+
+        <div id="reviewContainer"></div>
+
+        <div class="navigation">
+
+            <button onclick="showScreen('formScreen')">
+                ← Edit
+            </button>
+
+            <button
+                class="primary-button"
+                onclick="completeApplication()"
+                id="completeButton">
+
+                ✓ Complete
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= COMPLETE ================= -->
+
+<section id="completeScreen" class="screen">
+
+    <div class="card completion-card">
+
+        <div class="success-icon">✅</div>
+
+        <h1 id="completeTitle">
+            Guided Form Completed!
+        </h1>
+
+        <p id="completeDescription">
+            You have successfully completed all the required information.
+        </p>
+
+        <div class="important-note">
+
+            ℹ️
+
+            <span id="noteText">
+                This prototype demonstrates an accessible guided form.
+                Users can proceed to the official government portal
+                for actual submission.
+            </span>
+
+        </div>
+
+        <button
+            class="primary-button"
+            onclick="restartApplication()">
+
+            🔄 Start Again
+
+        </button>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+    <p>
+        EasyGov — Accessible Digital Government Services
+    </p>
+
+</footer>
+
+
+<script src="script.js"></script>
 
 </body>
-
-  </html>
+</html>
