@@ -1,6 +1,24 @@
-  /* =====================================================
-   EASYGOV - MAIN JAVASCRIPT
+/* =====================================================
+   EASYGOV
+   Firebase Authentication + Accessibility + Guided Form
    ===================================================== */
+
+
+/* ================= FIREBASE ================= */
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCR5tRFRdbJaDCtES-Cu_xByPL5YLpBb0",
+    authDomain: "easygov-6f128.firebaseapp.com",
+    projectId: "easygov-6f128",
+    storageBucket: "easygov-6f128.firebasestorage.app",
+    messagingSenderId: "800864492965",
+    appId: "1:800864492965:web:83f763ece6b7927c99dc4c",
+    measurementId: "G-F5N1S9LNME"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
 
 
 /* ================= GLOBAL VARIABLES ================= */
@@ -27,145 +45,292 @@ const questions = [
 
     {
         icon: "👤",
-
         enTitle: "What is your full name?",
-
         knTitle: "ನಿಮ್ಮ ಪೂರ್ಣ ಹೆಸರು ಏನು?",
-
         enDescription:
             "Enter your name as it appears on your official document.",
-
         knDescription:
             "ನಿಮ್ಮ ಅಧಿಕೃತ ದಾಖಲೆಯಲ್ಲಿ ಇರುವಂತೆ ನಿಮ್ಮ ಹೆಸರನ್ನು ನಮೂದಿಸಿ.",
-
         type: "text",
-
         placeholderEn: "Enter your full name",
-
         placeholderKn: "ನಿಮ್ಮ ಪೂರ್ಣ ಹೆಸರನ್ನು ನಮೂದಿಸಿ",
-
         key: "name"
     },
 
-
     {
         icon: "🎂",
-
         enTitle: "What is your date of birth?",
-
         knTitle: "ನಿಮ್ಮ ಜನ್ಮ ದಿನಾಂಕ ಯಾವುದು?",
-
         enDescription:
             "Enter your date of birth.",
-
         knDescription:
             "ನಿಮ್ಮ ಜನ್ಮ ದಿನಾಂಕವನ್ನು ನಮೂದಿಸಿ.",
-
         type: "date",
-
         placeholderEn: "",
-
         placeholderKn: "",
-
         key: "dob"
     },
 
-
     {
         icon: "🏠",
-
         enTitle: "What is your address?",
-
         knTitle: "ನಿಮ್ಮ ವಿಳಾಸ ಏನು?",
-
         enDescription:
             "Enter your current residential address.",
-
         knDescription:
             "ನಿಮ್ಮ ಪ್ರಸ್ತುತ ವಾಸದ ವಿಳಾಸವನ್ನು ನಮೂದಿಸಿ.",
-
         type: "text",
-
         placeholderEn: "Enter your address",
-
         placeholderKn: "ನಿಮ್ಮ ವಿಳಾಸವನ್ನು ನಮೂದಿಸಿ",
-
         key: "address"
     },
 
-
     {
         icon: "📱",
-
         enTitle: "What is your phone number?",
-
         knTitle: "ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆ ಏನು?",
-
         enDescription:
             "Enter your mobile phone number.",
-
         knDescription:
             "ನಿಮ್ಮ ಮೊಬೈಲ್ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ.",
-
         type: "tel",
-
         placeholderEn: "Enter your phone number",
-
-        placeholderKn: "ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ",
-
+        placeholderKn: "ನಿಮ್ಮ ಮೊಬೈಲ್ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ",
         key: "phone"
     },
 
-
     {
         icon: "🪪",
-
         enTitle: "Enter your identification number",
-
         knTitle: "ನಿಮ್ಮ ಗುರುತಿನ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ",
-
         enDescription:
             "Enter the identification number used for this demonstration.",
-
         knDescription:
             "ಈ ಪ್ರದರ್ಶನಕ್ಕಾಗಿ ಬಳಸುವ ಗುರುತಿನ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ.",
-
         type: "text",
-
         placeholderEn: "Enter identification number",
-
         placeholderKn: "ಗುರುತಿನ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ",
-
         key: "idNumber"
     },
 
-
     {
         icon: "📄",
-
         enTitle: "Which document do you have?",
-
         knTitle: "ನಿಮ್ಮ ಬಳಿ ಯಾವ ದಾಖಲೆ ಇದೆ?",
-
         enDescription:
             "Choose the document you want to use for this demonstration.",
-
         knDescription:
             "ಈ ಪ್ರದರ್ಶನಕ್ಕಾಗಿ ನೀವು ಬಳಸಲು ಬಯಸುವ ದಾಖಲೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
-
         type: "select",
-
         key: "document"
     }
 
 ];
 
 
-/* ================= SCREEN CONTROL ================= */
+/* =====================================================
+   FIREBASE AUTHENTICATION
+   ===================================================== */
+
+
+/* LOGIN */
+
+function loginUser() {
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    if (!email || !password) {
+
+        showAuthMessage(
+            "Please enter your email and password."
+        );
+
+        return;
+    }
+
+    showAuthMessage("Logging in...");
+
+    auth.signInWithEmailAndPassword(email, password)
+
+        .then(function() {
+
+            showAuthMessage("Login successful!");
+
+            showScreen("homeScreen");
+
+            document.getElementById("logoutButton").style.display =
+                "inline-block";
+
+        })
+
+        .catch(function(error) {
+
+            showAuthMessage(
+                getAuthErrorMessage(error)
+            );
+
+        });
+}
+
+
+/* REGISTER */
+
+function registerUser() {
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    if (!email || !password) {
+
+        showAuthMessage(
+            "Please enter an email and password."
+        );
+
+        return;
+    }
+
+    if (password.length < 6) {
+
+        showAuthMessage(
+            "Password must contain at least 6 characters."
+        );
+
+        return;
+    }
+
+    showAuthMessage("Creating your account...");
+
+    auth.createUserWithEmailAndPassword(email, password)
+
+        .then(function() {
+
+            showAuthMessage(
+                "Account created successfully!"
+            );
+
+            showScreen("homeScreen");
+
+            document.getElementById("logoutButton").style.display =
+                "inline-block";
+
+        })
+
+        .catch(function(error) {
+
+            showAuthMessage(
+                getAuthErrorMessage(error)
+            );
+
+        });
+}
+
+
+/* LOGOUT */
+
+function logout() {
+
+    auth.signOut()
+
+        .then(function() {
+
+            showScreen("loginScreen");
+
+            document.getElementById("logoutButton").style.display =
+                "none";
+
+            document.getElementById("email").value = "";
+
+            document.getElementById("password").value = "";
+
+            showAuthMessage("");
+
+        });
+
+}
+
+
+/* AUTH STATE */
+
+auth.onAuthStateChanged(function(user) {
+
+    if (user) {
+
+        document.getElementById("logoutButton").style.display =
+            "inline-block";
+
+        showScreen("homeScreen");
+
+    } else {
+
+        document.getElementById("logoutButton").style.display =
+            "none";
+
+    }
+
+});
+
+
+/* DEMO WITHOUT LOGIN */
+
+function showDemoWithoutLogin() {
+
+    showScreen("homeScreen");
+
+}
+
+
+/* AUTH ERROR MESSAGES */
+
+function getAuthErrorMessage(error) {
+
+    switch (error.code) {
+
+        case "auth/email-already-in-use":
+            return "This email is already registered. Please login.";
+
+        case "auth/invalid-email":
+            return "Please enter a valid email address.";
+
+        case "auth/weak-password":
+            return "Password is too weak. Use at least 6 characters.";
+
+        case "auth/invalid-credential":
+            return "Incorrect email or password.";
+
+        case "auth/user-not-found":
+            return "Account not found. Please create an account.";
+
+        case "auth/wrong-password":
+            return "Incorrect password.";
+
+        default:
+            return error.message;
+    }
+}
+
+
+function showAuthMessage(message) {
+
+    document.getElementById("authMessage").innerText =
+        message;
+}
+
+
+/* =====================================================
+   SCREEN CONTROL
+   ===================================================== */
 
 function showScreen(screenId) {
 
-    let screens = document.querySelectorAll(".screen");
+    let screens =
+        document.querySelectorAll(".screen");
 
     screens.forEach(function(screen) {
 
@@ -173,13 +338,17 @@ function showScreen(screenId) {
 
     });
 
-    document.getElementById(screenId).classList.add("active");
+    document
+        .getElementById(screenId)
+        .classList.add("active");
 
     window.scrollTo(0, 0);
 }
 
 
-/* ================= START APPLICATION ================= */
+/* =====================================================
+   APPLICATION
+   ===================================================== */
 
 function startApplication() {
 
@@ -187,8 +356,6 @@ function startApplication() {
 
 }
 
-
-/* ================= BEGIN FORM ================= */
 
 function beginForm() {
 
@@ -201,30 +368,33 @@ function beginForm() {
 }
 
 
-/* ================= LOAD QUESTION ================= */
+/* =====================================================
+   FORM
+   ===================================================== */
 
 function loadQuestion() {
 
-    let question = questions[currentQuestion];
+    let question =
+        questions[currentQuestion];
 
-    let total = questions.length;
+    let total =
+        questions.length;
 
-    let step = currentQuestion + 1;
+    let step =
+        currentQuestion + 1;
 
-    let percentage = Math.round((step / total) * 100);
+    let percentage =
+        Math.round((step / total) * 100);
 
 
     document.getElementById("stepText").innerText =
         "Step " + step + " of " + total;
 
-
     document.getElementById("progressPercent").innerText =
         percentage + "%";
 
-
     document.getElementById("progressFill").style.width =
         percentage + "%";
-
 
     document.getElementById("questionIcon").innerText =
         question.icon;
@@ -253,31 +423,40 @@ function loadQuestion() {
 
 
     document.getElementById("backButton").style.visibility =
-        currentQuestion === 0 ? "hidden" : "visible";
+        currentQuestion === 0
+            ? "hidden"
+            : "visible";
 
 
     document.getElementById("nextButton").innerText =
-        currentQuestion === total - 1
-            ? (currentLanguage === "kn" ? "ಪರಿಶೀಲಿಸಿ →" : "Review →")
-            : (currentLanguage === "kn" ? "ಮುಂದೆ →" : "Next →");
+        currentQuestion === questions.length - 1
 
+            ? (
+                currentLanguage === "kn"
+                    ? "ಪರಿಶೀಲಿಸಿ →"
+                    : "Review →"
+            )
+
+            : (
+                currentLanguage === "kn"
+                    ? "ಮುಂದೆ →"
+                    : "Next →"
+            );
 }
 
-
-/* ================= CREATE INPUT ================= */
 
 function createInput(question) {
 
     let container =
         document.getElementById("inputContainer");
 
-
     container.innerHTML = "";
 
 
     if (question.type === "select") {
 
-        let select = document.createElement("select");
+        let select =
+            document.createElement("select");
 
         select.id = "formInput";
 
@@ -306,33 +485,25 @@ function createInput(question) {
         select.value =
             applicationData[question.key];
 
-
         container.appendChild(select);
 
-
         return;
-
     }
 
 
-    let input = document.createElement("input");
+    let input =
+        document.createElement("input");
 
     input.id = "formInput";
 
-    input.type = question.type;
+    input.type =
+        question.type;
 
 
-    if (currentLanguage === "kn") {
-
-        input.placeholder =
-            question.placeholderKn;
-
-    } else {
-
-        input.placeholder =
-            question.placeholderEn;
-
-    }
+    input.placeholder =
+        currentLanguage === "kn"
+            ? question.placeholderKn
+            : question.placeholderEn;
 
 
     input.value =
@@ -344,20 +515,17 @@ function createInput(question) {
 }
 
 
-/* ================= SAVE CURRENT ANSWER ================= */
-
 function saveCurrentAnswer() {
 
     let input =
         document.getElementById("formInput");
 
-
     if (!input) {
         return true;
     }
 
-
-    let value = input.value.trim();
+    let value =
+        input.value.trim();
 
 
     if (value === "") {
@@ -378,15 +546,13 @@ function saveCurrentAnswer() {
         questions[currentQuestion].key;
 
 
-    applicationData[key] = value;
+    applicationData[key] =
+        value;
 
 
     return true;
-
 }
 
-
-/* ================= NEXT QUESTION ================= */
 
 function nextQuestion() {
 
@@ -395,7 +561,10 @@ function nextQuestion() {
     }
 
 
-    if (currentQuestion < questions.length - 1) {
+    if (
+        currentQuestion <
+        questions.length - 1
+    ) {
 
         currentQuestion++;
 
@@ -411,8 +580,6 @@ function nextQuestion() {
 
 }
 
-
-/* ================= PREVIOUS QUESTION ================= */
 
 function previousQuestion() {
 
@@ -430,7 +597,9 @@ function previousQuestion() {
 }
 
 
-/* ================= CREATE REVIEW ================= */
+/* =====================================================
+   REVIEW
+   ===================================================== */
 
 function createReview() {
 
@@ -438,133 +607,87 @@ function createReview() {
         document.getElementById("reviewContainer");
 
 
-    let labels;
+    let labels = {
 
+        name:
+            currentLanguage === "kn"
+                ? "ಹೆಸರು"
+                : "Full Name",
 
-    if (currentLanguage === "kn") {
+        dob:
+            currentLanguage === "kn"
+                ? "ಜನ್ಮ ದಿನಾಂಕ"
+                : "Date of Birth",
 
-        labels = {
+        address:
+            currentLanguage === "kn"
+                ? "ವಿಳಾಸ"
+                : "Address",
 
-            name: "ಹೆಸರು",
+        phone:
+            currentLanguage === "kn"
+                ? "ಫೋನ್ ಸಂಖ್ಯೆ"
+                : "Phone Number",
 
-            dob: "ಜನ್ಮ ದಿನಾಂಕ",
+        idNumber:
+            currentLanguage === "kn"
+                ? "ಗುರುತಿನ ಸಂಖ್ಯೆ"
+                : "Identification Number",
 
-            address: "ವಿಳಾಸ",
-
-            phone: "ಫೋನ್ ಸಂಖ್ಯೆ",
-
-            idNumber: "ಗುರುತಿನ ಸಂಖ್ಯೆ",
-
-            document: "ದಾಖಲೆ"
-
-        };
-
-    } else {
-
-        labels = {
-
-            name: "Full Name",
-
-            dob: "Date of Birth",
-
-            address: "Address",
-
-            phone: "Phone Number",
-
-            idNumber: "Identification Number",
-
-            document: "Document"
-
-        };
-
-    }
+        document:
+            currentLanguage === "kn"
+                ? "ದಾಖಲೆ"
+                : "Document"
+    };
 
 
     container.innerHTML = `
 
         <div class="review-item">
-
-            <span class="review-label">
-                ${labels.name}
-            </span>
-
+            <span class="review-label">${labels.name}</span>
             <span class="review-value">
                 ${escapeHTML(applicationData.name)}
             </span>
-
         </div>
 
-
         <div class="review-item">
-
-            <span class="review-label">
-                ${labels.dob}
-            </span>
-
+            <span class="review-label">${labels.dob}</span>
             <span class="review-value">
                 ${escapeHTML(applicationData.dob)}
             </span>
-
         </div>
 
-
         <div class="review-item">
-
-            <span class="review-label">
-                ${labels.address}
-            </span>
-
+            <span class="review-label">${labels.address}</span>
             <span class="review-value">
                 ${escapeHTML(applicationData.address)}
             </span>
-
         </div>
 
-
         <div class="review-item">
-
-            <span class="review-label">
-                ${labels.phone}
-            </span>
-
+            <span class="review-label">${labels.phone}</span>
             <span class="review-value">
                 ${escapeHTML(applicationData.phone)}
             </span>
-
         </div>
 
-
         <div class="review-item">
-
-            <span class="review-label">
-                ${labels.idNumber}
-            </span>
-
+            <span class="review-label">${labels.idNumber}</span>
             <span class="review-value">
                 ${escapeHTML(applicationData.idNumber)}
             </span>
-
         </div>
 
-
         <div class="review-item">
-
-            <span class="review-label">
-                ${labels.document}
-            </span>
-
+            <span class="review-label">${labels.document}</span>
             <span class="review-value">
                 ${escapeHTML(applicationData.document)}
             </span>
-
         </div>
 
     `;
-
 }
 
-
-/* ================= COMPLETE ================= */
 
 function completeApplication() {
 
@@ -572,8 +695,6 @@ function completeApplication() {
 
 }
 
-
-/* ================= RESTART ================= */
 
 function restartApplication() {
 
@@ -588,7 +709,6 @@ function restartApplication() {
 
     };
 
-
     currentQuestion = 0;
 
     showScreen("homeScreen");
@@ -596,26 +716,22 @@ function restartApplication() {
 }
 
 
-/* ================= READ ALOUD ================= */
+/* =====================================================
+   READ ALOUD
+   ===================================================== */
 
 function readCurrentPage() {
-
-    let text = "";
-
 
     let activeScreen =
         document.querySelector(".screen.active");
 
 
-    if (activeScreen) {
-
-        text =
-            activeScreen.innerText;
-
+    if (!activeScreen) {
+        return;
     }
 
 
-    speak(text);
+    speak(activeScreen.innerText);
 
 }
 
@@ -643,7 +759,6 @@ function speak(text) {
         );
 
         return;
-
     }
 
 
@@ -675,7 +790,8 @@ function speak(text) {
 
         if (kannadaVoice) {
 
-            speech.voice = kannadaVoice;
+            speech.voice =
+                kannadaVoice;
 
         }
 
@@ -696,7 +812,8 @@ function speak(text) {
 
         if (englishVoice) {
 
-            speech.voice = englishVoice;
+            speech.voice =
+                englishVoice;
 
         }
 
@@ -708,7 +825,9 @@ function speak(text) {
 }
 
 
-/* ================= TEXT SIZE ================= */
+/* =====================================================
+   TEXT SIZE
+   ===================================================== */
 
 function changeTextSize(amount) {
 
@@ -716,16 +835,12 @@ function changeTextSize(amount) {
 
 
     if (textSize < 0.8) {
-
         textSize = 0.8;
-
     }
 
 
     if (textSize > 1.4) {
-
         textSize = 1.4;
-
     }
 
 
@@ -745,11 +860,15 @@ function resetTextSize() {
 }
 
 
-/* ================= HIGH CONTRAST ================= */
+/* =====================================================
+   HIGH CONTRAST
+   ===================================================== */
 
 function toggleContrast() {
 
-    document.body.classList.toggle("high-contrast");
+    document.body.classList.toggle(
+        "high-contrast"
+    );
 
 
     let button =
@@ -757,7 +876,9 @@ function toggleContrast() {
 
 
     if (
-        document.body.classList.contains("high-contrast")
+        document.body.classList.contains(
+            "high-contrast"
+        )
     ) {
 
         button.innerText =
@@ -771,20 +892,40 @@ function toggleContrast() {
             currentLanguage === "kn"
                 ? "🌓 ಕಾಂಟ್ರಾಸ್ಟ್"
                 : "🌓 Contrast";
-
     }
 
 }
 
 
-/* ================= LANGUAGE ================= */
+/* =====================================================
+   LANGUAGE
+   ===================================================== */
 
 function setLanguage(language) {
 
-    currentLanguage = language;
+    currentLanguage =
+        language;
 
 
     if (language === "kn") {
+
+        document.getElementById("loginTitle").innerText =
+            "EasyGov ಗೆ ಸ್ವಾಗತ";
+
+        document.getElementById("loginDescription").innerText =
+            "ಪ್ರವೇಶಿಸಬಹುದಾದ ಸರ್ಕಾರಿ ಸೇವೆಗಳನ್ನು ಬಳಸಲು ಸೈನ್ ಇನ್ ಮಾಡಿ.";
+
+        document.getElementById("emailLabel").innerText =
+            "ಇಮೇಲ್";
+
+        document.getElementById("passwordLabel").innerText =
+            "ಪಾಸ್‌ವರ್ಡ್";
+
+        document.getElementById("loginButton").innerText =
+            "🔐 ಲಾಗಿನ್";
+
+        document.getElementById("registerButton").innerText =
+            "ಖಾತೆ ರಚಿಸಿ";
 
         document.getElementById("homeTitle").innerText =
             "ಸರ್ಕಾರಿ ಸೇವೆಗಳನ್ನು ಎಲ್ಲರಿಗೂ ಸುಲಭವಾಗಿಸಿ";
@@ -823,12 +964,33 @@ function setLanguage(language) {
             "ನೀವು ಅಗತ್ಯವಿರುವ ಎಲ್ಲಾ ಮಾಹಿತಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಳಿಸಿದ್ದೀರಿ.";
 
         document.getElementById("noteText").innerText =
-            "ಈ ಪ್ರೋಟೋಟೈಪ್ ಪ್ರವೇಶಿಸಬಹುದಾದ ಮಾರ್ಗದರ್ಶಿತ ಫಾರ್ಮ್ ಅನ್ನು ಪ್ರದರ್ಶಿಸುತ್ತದೆ. ನಿಜವಾದ ಸಲ್ಲಿಕೆಗಾಗಿ ಅಧಿಕೃತ ಸರ್ಕಾರಿ ಪೋರ್ಟಲ್‌ಗೆ ಮುಂದುವರಿಯಬಹುದು.";
+            "ಈ ಪ್ರೋಟೋಟೈಪ್ ಪ್ರವೇಶಿಸಬಹುದಾದ ಮಾರ್ಗದರ್ಶಿತ ಫಾರ್ಮ್ ಅನ್ನು ಪ್ರದರ್ಶಿಸುತ್ತದೆ.";
 
         document.getElementById("contrastBtn").innerText =
             "🌓 ಕಾಂಟ್ರಾಸ್ಟ್";
 
+        document.getElementById("logoutButton").innerText =
+            "ಲಾಗ್‌ಔಟ್";
+
     } else {
+
+        document.getElementById("loginTitle").innerText =
+            "Welcome to EasyGov";
+
+        document.getElementById("loginDescription").innerText =
+            "Sign in to access accessible government services.";
+
+        document.getElementById("emailLabel").innerText =
+            "Email";
+
+        document.getElementById("passwordLabel").innerText =
+            "Password";
+
+        document.getElementById("loginButton").innerText =
+            "🔐 Login";
+
+        document.getElementById("registerButton").innerText =
+            "Create Account";
 
         document.getElementById("homeTitle").innerText =
             "Government Services, Made Easier for Everyone";
@@ -872,13 +1034,10 @@ function setLanguage(language) {
         document.getElementById("contrastBtn").innerText =
             "🌓 Contrast";
 
+        document.getElementById("logoutButton").innerText =
+            "Logout";
     }
 
-
-    /*
-       If the user is already inside the form,
-       reload the current question in the new language.
-    */
 
     if (
         document
@@ -893,25 +1052,16 @@ function setLanguage(language) {
 }
 
 
-/* ================= SECURITY HELPER ================= */
-
-/*
-   Prevent HTML entered by the user from being
-   interpreted as webpage code in the review screen.
-*/
+/* =====================================================
+   SECURITY HELPER
+   ===================================================== */
 
 function escapeHTML(value) {
 
     return String(value)
-
         .replace(/&/g, "&amp;")
-
         .replace(/</g, "&lt;")
-
         .replace(/>/g, "&gt;")
-
         .replace(/"/g, "&quot;")
-
         .replace(/'/g, "&#039;");
-
 }
