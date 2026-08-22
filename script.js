@@ -1,140 +1,246 @@
-/* =====================================================
-   EASYGOV
-   Firebase Authentication + Accessibility + Guided Form
-   ===================================================== */
+// =====================================================
+// EASYGOV - COMPLETE SCRIPT
+// =====================================================
 
 
-/* ================= FIREBASE ================= */
+// =====================================================
+// FIREBASE CONFIGURATION
+// =====================================================
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC8CCFdM6hUCBww1hJacJA5rUTUmkrpYlg",
-  authDomain: "easygov-44a8a.firebaseapp.com",
-  projectId: "easygov-44a8a",
-  storageBucket: "easygov-44a8a.firebasestorage.app",
-  messagingSenderId: "16198895275",
-  appId: "1:16198895275:web:804e178f5be07c3fbc19ee",
-  measurementId: "G-V6ZC73RPN6"
+    apiKey: "AIzaSyCRS5tRFRdbJaDCtES-Cu_xByPL5YLpBb0",
+    authDomain: "easygov-6f128.firebaseapp.com",
+    projectId: "easygov-6f128",
+    storageBucket: "easygov-6f128.firebasestorage.app",
+    messagingSenderId: "800864492965",
+    appId: "1:800864492965:web:83f763ece6b7927c99dc4c",
+    measurementId: "G-F5N1S9LNME"
 };
 
 
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 
 
-/* ================= GLOBAL VARIABLES ================= */
+// =====================================================
+// GLOBAL VARIABLES
+// =====================================================
 
 let currentLanguage = "en";
 
-let currentQuestion = 0;
-
 let textSize = 1;
 
-let applicationData = {
-    name: "",
-    dob: "",
-    address: "",
-    phone: "",
-    idNumber: "",
-    document: ""
-};
+let currentQuestion = 0;
+
+let formAnswers = {};
 
 
-/* ================= FORM QUESTIONS ================= */
+// =====================================================
+// FORM QUESTIONS
+// =====================================================
 
 const questions = [
 
     {
         icon: "👤",
-        enTitle: "What is your full name?",
-        knTitle: "ನಿಮ್ಮ ಪೂರ್ಣ ಹೆಸರು ಏನು?",
-        enDescription:
-            "Enter your name as it appears on your official document.",
-        knDescription:
-            "ನಿಮ್ಮ ಅಧಿಕೃತ ದಾಖಲೆಯಲ್ಲಿ ಇರುವಂತೆ ನಿಮ್ಮ ಹೆಸರನ್ನು ನಮೂದಿಸಿ.",
+
+        title: {
+            en: "What is your full name?",
+            kn: "ನಿಮ್ಮ ಪೂರ್ಣ ಹೆಸರು ಏನು?"
+        },
+
+        description: {
+            en: "Enter your name as it appears on your official document.",
+            kn: "ನಿಮ್ಮ ಅಧಿಕೃತ ದಾಖಲೆಯಲ್ಲಿ ಇರುವಂತೆ ನಿಮ್ಮ ಹೆಸರನ್ನು ನಮೂದಿಸಿ."
+        },
+
         type: "text",
-        placeholderEn: "Enter your full name",
-        placeholderKn: "ನಿಮ್ಮ ಪೂರ್ಣ ಹೆಸರನ್ನು ನಮೂದಿಸಿ",
-        key: "name"
+
+        placeholder: {
+            en: "Enter your full name",
+            kn: "ನಿಮ್ಮ ಪೂರ್ಣ ಹೆಸರನ್ನು ನಮೂದಿಸಿ"
+        }
     },
+
 
     {
         icon: "🎂",
-        enTitle: "What is your date of birth?",
-        knTitle: "ನಿಮ್ಮ ಜನ್ಮ ದಿನಾಂಕ ಯಾವುದು?",
-        enDescription:
-            "Enter your date of birth.",
-        knDescription:
-            "ನಿಮ್ಮ ಜನ್ಮ ದಿನಾಂಕವನ್ನು ನಮೂದಿಸಿ.",
+
+        title: {
+            en: "What is your date of birth?",
+            kn: "ನಿಮ್ಮ ಜನ್ಮ ದಿನಾಂಕ ಯಾವುದು?"
+        },
+
+        description: {
+            en: "Enter your date of birth.",
+            kn: "ನಿಮ್ಮ ಜನ್ಮ ದಿನಾಂಕವನ್ನು ನಮೂದಿಸಿ."
+        },
+
         type: "date",
-        placeholderEn: "",
-        placeholderKn: "",
-        key: "dob"
+
+        placeholder: {
+            en: "",
+            kn: ""
+        }
     },
 
-    {
-        icon: "🏠",
-        enTitle: "What is your address?",
-        knTitle: "ನಿಮ್ಮ ವಿಳಾಸ ಏನು?",
-        enDescription:
-            "Enter your current residential address.",
-        knDescription:
-            "ನಿಮ್ಮ ಪ್ರಸ್ತುತ ವಾಸದ ವಿಳಾಸವನ್ನು ನಮೂದಿಸಿ.",
-        type: "text",
-        placeholderEn: "Enter your address",
-        placeholderKn: "ನಿಮ್ಮ ವಿಳಾಸವನ್ನು ನಮೂದಿಸಿ",
-        key: "address"
-    },
 
     {
         icon: "📱",
-        enTitle: "What is your phone number?",
-        knTitle: "ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆ ಏನು?",
-        enDescription:
-            "Enter your mobile phone number.",
-        knDescription:
-            "ನಿಮ್ಮ ಮೊಬೈಲ್ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ.",
+
+        title: {
+            en: "What is your mobile number?",
+            kn: "ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆ ಏನು?"
+        },
+
+        description: {
+            en: "Enter a valid mobile number.",
+            kn: "ಮಾನ್ಯವಾದ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ."
+        },
+
         type: "tel",
-        placeholderEn: "Enter your phone number",
-        placeholderKn: "ನಿಮ್ಮ ಮೊಬೈಲ್ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ",
-        key: "phone"
+
+        placeholder: {
+            en: "Enter mobile number",
+            kn: "ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ"
+        }
     },
 
+
     {
-        icon: "🪪",
-        enTitle: "Enter your identification number",
-        knTitle: "ನಿಮ್ಮ ಗುರುತಿನ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ",
-        enDescription:
-            "Enter the identification number used for this demonstration.",
-        knDescription:
-            "ಈ ಪ್ರದರ್ಶನಕ್ಕಾಗಿ ಬಳಸುವ ಗುರುತಿನ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ.",
+        icon: "🏠",
+
+        title: {
+            en: "What is your address?",
+            kn: "ನಿಮ್ಮ ವಿಳಾಸ ಏನು?"
+        },
+
+        description: {
+            en: "Enter your current residential address.",
+            kn: "ನಿಮ್ಮ ಪ್ರಸ್ತುತ ವಾಸಸ್ಥಳದ ವಿಳಾಸವನ್ನು ನಮೂದಿಸಿ."
+        },
+
         type: "text",
-        placeholderEn: "Enter identification number",
-        placeholderKn: "ಗುರುತಿನ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ",
-        key: "idNumber"
+
+        placeholder: {
+            en: "Enter your address",
+            kn: "ನಿಮ್ಮ ವಿಳಾಸವನ್ನು ನಮೂದಿಸಿ"
+        }
     },
+
+
+    {
+        icon: "📍",
+
+        title: {
+            en: "Select your state",
+            kn: "ನಿಮ್ಮ ರಾಜ್ಯವನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+        },
+
+        description: {
+            en: "Select the state where you currently live.",
+            kn: "ನೀವು ಪ್ರಸ್ತುತ ವಾಸಿಸುವ ರಾಜ್ಯವನ್ನು ಆಯ್ಕೆಮಾಡಿ."
+        },
+
+        type: "select",
+
+        placeholder: {
+            en: "Select your state",
+            kn: "ನಿಮ್ಮ ರಾಜ್ಯವನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+        }
+    },
+
 
     {
         icon: "📄",
-        enTitle: "Which document do you have?",
-        knTitle: "ನಿಮ್ಮ ಬಳಿ ಯಾವ ದಾಖಲೆ ಇದೆ?",
-        enDescription:
-            "Choose the document you want to use for this demonstration.",
-        knDescription:
-            "ಈ ಪ್ರದರ್ಶನಕ್ಕಾಗಿ ನೀವು ಬಳಸಲು ಬಯಸುವ ದಾಖಲೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+
+        title: {
+            en: "What government service do you need?",
+            kn: "ನಿಮಗೆ ಯಾವ ಸರ್ಕಾರಿ ಸೇವೆ ಬೇಕಾಗಿದೆ?"
+        },
+
+        description: {
+            en: "Select the government service you want help with.",
+            kn: "ನಿಮಗೆ ಬೇಕಾದ ಸರ್ಕಾರಿ ಸೇವೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ."
+        },
+
         type: "select",
-        key: "document"
+
+        placeholder: {
+            en: "Select a service",
+            kn: "ಸೇವೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+        }
     }
 
 ];
 
 
-/* =====================================================
-   FIREBASE AUTHENTICATION
-   ===================================================== */
+// =====================================================
+// STATE OPTIONS
+// =====================================================
+
+const states = [
+
+    "Karnataka",
+    "Tamil Nadu",
+    "Kerala",
+    "Andhra Pradesh",
+    "Telangana",
+    "Maharashtra",
+    "Other"
+
+];
 
 
-/* LOGIN */
+// =====================================================
+// GOVERNMENT SERVICES
+// =====================================================
+
+const services = [
+
+    "Aadhaar related service",
+    "Income Certificate",
+    "Caste Certificate",
+    "Residence Certificate",
+    "Government Scheme",
+    "Other"
+
+];
+
+
+// =====================================================
+// SCREEN MANAGEMENT
+// =====================================================
+
+function showScreen(screenId) {
+
+    const screens = document.querySelectorAll(".screen");
+
+    screens.forEach(screen => {
+        screen.classList.remove("active");
+    });
+
+    const selectedScreen = document.getElementById(screenId);
+
+    if (selectedScreen) {
+        selectedScreen.classList.add("active");
+    }
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+// =====================================================
+// FIREBASE AUTHENTICATION
+// =====================================================
+
+
+// LOGIN
 
 function loginUser() {
 
@@ -144,41 +250,52 @@ function loginUser() {
     const password =
         document.getElementById("password").value;
 
+
     if (!email || !password) {
 
         showAuthMessage(
-            "Please enter your email and password."
+            "Please enter your email and password.",
+            "error"
         );
 
         return;
     }
 
-    showAuthMessage("Logging in...");
+
+    showAuthMessage(
+        "Logging in...",
+        "normal"
+    );
+
 
     auth.signInWithEmailAndPassword(email, password)
 
-        .then(function() {
+        .then(() => {
 
-            showAuthMessage("Login successful!");
+            showAuthMessage(
+                "Login successful!",
+                "success"
+            );
 
-            showScreen("homeScreen");
-
-            document.getElementById("logoutButton").style.display =
-                "inline-block";
+            showHome();
 
         })
 
-        .catch(function(error) {
+        .catch(error => {
+
+            console.error(error);
 
             showAuthMessage(
-                getAuthErrorMessage(error)
+                getFirebaseErrorMessage(error),
+                "error"
             );
 
         });
+
 }
 
 
-/* REGISTER */
+// REGISTER
 
 function registerUser() {
 
@@ -188,58 +305,69 @@ function registerUser() {
     const password =
         document.getElementById("password").value;
 
+
     if (!email || !password) {
 
         showAuthMessage(
-            "Please enter an email and password."
+            "Please enter an email and password.",
+            "error"
         );
 
         return;
     }
+
 
     if (password.length < 6) {
 
         showAuthMessage(
-            "Password must contain at least 6 characters."
+            "Password must contain at least 6 characters.",
+            "error"
         );
 
         return;
     }
 
-    showAuthMessage("Creating your account...");
+
+    showAuthMessage(
+        "Creating your account...",
+        "normal"
+    );
+
 
     auth.createUserWithEmailAndPassword(email, password)
 
-        .then(function() {
+        .then(() => {
 
             showAuthMessage(
-                "Account created successfully!"
+                "Account created successfully!",
+                "success"
             );
 
-            showScreen("homeScreen");
-
-            document.getElementById("logoutButton").style.display =
-                "inline-block";
+            showHome();
 
         })
 
-        .catch(function(error) {
+        .catch(error => {
+
+            console.error(error);
 
             showAuthMessage(
-                getAuthErrorMessage(error)
+                getFirebaseErrorMessage(error),
+                "error"
             );
 
         });
+
 }
 
 
-/* LOGOUT */
+// LOGOUT
 
 function logout() {
 
     auth.signOut()
 
-        .then(function() {
+        .then(() => {
 
             showScreen("loginScreen");
 
@@ -250,662 +378,131 @@ function logout() {
 
             document.getElementById("password").value = "";
 
-            showAuthMessage("");
+        })
+
+        .catch(error => {
+
+            console.error(error);
 
         });
 
 }
 
 
-/* AUTH STATE */
+// AUTH STATE
 
 auth.onAuthStateChanged(function(user) {
 
+    const logoutButton =
+        document.getElementById("logoutButton");
+
+
     if (user) {
 
-        document.getElementById("logoutButton").style.display =
-            "inline-block";
+        logoutButton.style.display = "block";
 
-        showScreen("homeScreen");
+        showHome();
 
     } else {
 
-        document.getElementById("logoutButton").style.display =
-            "none";
+        logoutButton.style.display = "none";
+
+        showScreen("loginScreen");
 
     }
 
 });
 
 
-/* DEMO WITHOUT LOGIN */
+// =====================================================
+// AUTH MESSAGE
+// =====================================================
 
-function showDemoWithoutLogin() {
+function showAuthMessage(message, type) {
 
-    showScreen("homeScreen");
+    const box =
+        document.getElementById("authMessage");
+
+    box.innerText = message;
+
+    if (type === "error") {
+
+        box.style.color = "red";
+
+    } else if (type === "success") {
+
+        box.style.color = "green";
+
+    } else {
+
+        box.style.color = "#333";
+
+    }
 
 }
 
 
-/* AUTH ERROR MESSAGES */
+// FIREBASE ERROR TRANSLATION
 
-function getAuthErrorMessage(error) {
+function getFirebaseErrorMessage(error) {
 
     switch (error.code) {
-
-        case "auth/email-already-in-use":
-            return "This email is already registered. Please login.";
 
         case "auth/invalid-email":
             return "Please enter a valid email address.";
 
-        case "auth/weak-password":
-            return "Password is too weak. Use at least 6 characters.";
-
-        case "auth/invalid-credential":
-            return "Incorrect email or password.";
-
         case "auth/user-not-found":
-            return "Account not found. Please create an account.";
+            return "No account found with this email.";
 
         case "auth/wrong-password":
             return "Incorrect password.";
 
+        case "auth/email-already-in-use":
+            return "This email already has an account. Please login.";
+
+        case "auth/weak-password":
+            return "Password should contain at least 6 characters.";
+
+        case "auth/invalid-credential":
+            return "Incorrect email or password.";
+
         default:
-            return error.message;
-    }
-}
-
-
-function showAuthMessage(message) {
-
-    document.getElementById("authMessage").innerText =
-        message;
-}
-
-
-/* =====================================================
-   SCREEN CONTROL
-   ===================================================== */
-
-function showScreen(screenId) {
-
-    let screens =
-        document.querySelectorAll(".screen");
-
-    screens.forEach(function(screen) {
-
-        screen.classList.remove("active");
-
-    });
-
-    document
-        .getElementById(screenId)
-        .classList.add("active");
-
-    window.scrollTo(0, 0);
-}
-
-
-/* =====================================================
-   APPLICATION
-   ===================================================== */
-
-function startApplication() {
-
-    showScreen("preferencesScreen");
-
-}
-
-
-function beginForm() {
-
-    currentQuestion = 0;
-
-    loadQuestion();
-
-    showScreen("formScreen");
-
-}
-
-
-/* =====================================================
-   FORM
-   ===================================================== */
-
-function loadQuestion() {
-
-    let question =
-        questions[currentQuestion];
-
-    let total =
-        questions.length;
-
-    let step =
-        currentQuestion + 1;
-
-    let percentage =
-        Math.round((step / total) * 100);
-
-
-    document.getElementById("stepText").innerText =
-        "Step " + step + " of " + total;
-
-    document.getElementById("progressPercent").innerText =
-        percentage + "%";
-
-    document.getElementById("progressFill").style.width =
-        percentage + "%";
-
-    document.getElementById("questionIcon").innerText =
-        question.icon;
-
-
-    if (currentLanguage === "kn") {
-
-        document.getElementById("questionTitle").innerText =
-            question.knTitle;
-
-        document.getElementById("questionDescription").innerText =
-            question.knDescription;
-
-    } else {
-
-        document.getElementById("questionTitle").innerText =
-            question.enTitle;
-
-        document.getElementById("questionDescription").innerText =
-            question.enDescription;
+            return "Something went wrong. Please try again.";
 
     }
 
-
-    createInput(question);
-
-
-    document.getElementById("backButton").style.visibility =
-        currentQuestion === 0
-            ? "hidden"
-            : "visible";
-
-
-    document.getElementById("nextButton").innerText =
-        currentQuestion === questions.length - 1
-
-            ? (
-                currentLanguage === "kn"
-                    ? "ಪರಿಶೀಲಿಸಿ →"
-                    : "Review →"
-            )
-
-            : (
-                currentLanguage === "kn"
-                    ? "ಮುಂದೆ →"
-                    : "Next →"
-            );
 }
 
 
-function createInput(question) {
-
-    let container =
-        document.getElementById("inputContainer");
-
-    container.innerHTML = "";
-
-
-    if (question.type === "select") {
-
-        let select =
-            document.createElement("select");
-
-        select.id = "formInput";
-
-
-        if (currentLanguage === "kn") {
-
-            select.innerHTML = `
-                <option value="">ದಾಖಲೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ</option>
-                <option value="Identity Document">ಗುರುತಿನ ದಾಖಲೆ</option>
-                <option value="Address Document">ವಿಳಾಸದ ದಾಖಲೆ</option>
-                <option value="Other Document">ಇತರ ದಾಖಲೆ</option>
-            `;
-
-        } else {
-
-            select.innerHTML = `
-                <option value="">Select a document</option>
-                <option value="Identity Document">Identity Document</option>
-                <option value="Address Document">Address Document</option>
-                <option value="Other Document">Other Document</option>
-            `;
-
-        }
-
-
-        select.value =
-            applicationData[question.key];
-
-        container.appendChild(select);
-
-        return;
-    }
-
-
-    let input =
-        document.createElement("input");
-
-    input.id = "formInput";
-
-    input.type =
-        question.type;
-
-
-    input.placeholder =
-        currentLanguage === "kn"
-            ? question.placeholderKn
-            : question.placeholderEn;
-
-
-    input.value =
-        applicationData[question.key];
-
-
-    container.appendChild(input);
-
-}
-
-
-function saveCurrentAnswer() {
-
-    let input =
-        document.getElementById("formInput");
-
-    if (!input) {
-        return true;
-    }
-
-    let value =
-        input.value.trim();
-
-
-    if (value === "") {
-
-        alert(
-            currentLanguage === "kn"
-                ? "ದಯವಿಟ್ಟು ಈ ಮಾಹಿತಿಯನ್ನು ನಮೂದಿಸಿ."
-                : "Please enter this information."
-        );
-
-        input.focus();
-
-        return false;
-    }
-
-
-    let key =
-        questions[currentQuestion].key;
-
-
-    applicationData[key] =
-        value;
-
-
-    return true;
-}
-
-
-function nextQuestion() {
-
-    if (!saveCurrentAnswer()) {
-        return;
-    }
-
-
-    if (
-        currentQuestion <
-        questions.length - 1
-    ) {
-
-        currentQuestion++;
-
-        loadQuestion();
-
-    } else {
-
-        createReview();
-
-        showScreen("reviewScreen");
-
-    }
-
-}
-
-
-function previousQuestion() {
-
-    saveCurrentAnswer();
-
-
-    if (currentQuestion > 0) {
-
-        currentQuestion--;
-
-        loadQuestion();
-
-    }
-
-}
-
-
-/* =====================================================
-   REVIEW
-   ===================================================== */
-
-function createReview() {
-
-    let container =
-        document.getElementById("reviewContainer");
-
-
-    let labels = {
-
-        name:
-            currentLanguage === "kn"
-                ? "ಹೆಸರು"
-                : "Full Name",
-
-        dob:
-            currentLanguage === "kn"
-                ? "ಜನ್ಮ ದಿನಾಂಕ"
-                : "Date of Birth",
-
-        address:
-            currentLanguage === "kn"
-                ? "ವಿಳಾಸ"
-                : "Address",
-
-        phone:
-            currentLanguage === "kn"
-                ? "ಫೋನ್ ಸಂಖ್ಯೆ"
-                : "Phone Number",
-
-        idNumber:
-            currentLanguage === "kn"
-                ? "ಗುರುತಿನ ಸಂಖ್ಯೆ"
-                : "Identification Number",
-
-        document:
-            currentLanguage === "kn"
-                ? "ದಾಖಲೆ"
-                : "Document"
-    };
-
-
-    container.innerHTML = `
-
-        <div class="review-item">
-            <span class="review-label">${labels.name}</span>
-            <span class="review-value">
-                ${escapeHTML(applicationData.name)}
-            </span>
-        </div>
-
-        <div class="review-item">
-            <span class="review-label">${labels.dob}</span>
-            <span class="review-value">
-                ${escapeHTML(applicationData.dob)}
-            </span>
-        </div>
-
-        <div class="review-item">
-            <span class="review-label">${labels.address}</span>
-            <span class="review-value">
-                ${escapeHTML(applicationData.address)}
-            </span>
-        </div>
-
-        <div class="review-item">
-            <span class="review-label">${labels.phone}</span>
-            <span class="review-value">
-                ${escapeHTML(applicationData.phone)}
-            </span>
-        </div>
-
-        <div class="review-item">
-            <span class="review-label">${labels.idNumber}</span>
-            <span class="review-value">
-                ${escapeHTML(applicationData.idNumber)}
-            </span>
-        </div>
-
-        <div class="review-item">
-            <span class="review-label">${labels.document}</span>
-            <span class="review-value">
-                ${escapeHTML(applicationData.document)}
-            </span>
-        </div>
-
-    `;
-}
-
-
-function completeApplication() {
-
-    showScreen("completeScreen");
-
-}
-
-
-function restartApplication() {
-
-    applicationData = {
-
-        name: "",
-        dob: "",
-        address: "",
-        phone: "",
-        idNumber: "",
-        document: ""
-
-    };
-
-    currentQuestion = 0;
+// =====================================================
+// HOME
+// =====================================================
+
+function showHome() {
 
     showScreen("homeScreen");
 
 }
 
 
-/* =====================================================
-   READ ALOUD
-   ===================================================== */
+// =====================================================
+// DEMO WITHOUT LOGIN
+// =====================================================
 
-function readCurrentPage() {
+function showDemoWithoutLogin() {
 
-    let activeScreen =
-        document.querySelector(".screen.active");
-
-
-    if (!activeScreen) {
-        return;
-    }
-
-
-    speak(activeScreen.innerText);
+    showHome();
 
 }
 
 
-function readQuestion() {
-
-    let title =
-        document.getElementById("questionTitle").innerText;
-
-    let description =
-        document.getElementById("questionDescription").innerText;
-
-
-    speak(title + ". " + description);
-
-}
-
-
-function speak(text) {
-
-    if (!("speechSynthesis" in window)) {
-
-        alert(
-            "Read Aloud is not supported in this browser."
-        );
-
-        return;
-    }
-
-
-    speechSynthesis.cancel();
-
-
-    let speech =
-        new SpeechSynthesisUtterance(text);
-
-
-    let voices =
-        speechSynthesis.getVoices();
-
-
-    if (currentLanguage === "kn") {
-
-        speech.lang = "kn-IN";
-
-
-        let kannadaVoice =
-            voices.find(function(voice) {
-
-                return voice.lang
-                    .toLowerCase()
-                    .startsWith("kn");
-
-            });
-
-
-        if (kannadaVoice) {
-
-            speech.voice =
-                kannadaVoice;
-
-        }
-
-    } else {
-
-        speech.lang = "en-US";
-
-
-        let englishVoice =
-            voices.find(function(voice) {
-
-                return voice.lang
-                    .toLowerCase()
-                    .startsWith("en");
-
-            });
-
-
-        if (englishVoice) {
-
-            speech.voice =
-                englishVoice;
-
-        }
-
-    }
-
-
-    speechSynthesis.speak(speech);
-
-}
-
-
-/* =====================================================
-   TEXT SIZE
-   ===================================================== */
-
-function changeTextSize(amount) {
-
-    textSize += amount * 0.1;
-
-
-    if (textSize < 0.8) {
-        textSize = 0.8;
-    }
-
-
-    if (textSize > 1.4) {
-        textSize = 1.4;
-    }
-
-
-    document.documentElement.style.fontSize =
-        textSize + "em";
-
-}
-
-
-function resetTextSize() {
-
-    textSize = 1;
-
-    document.documentElement.style.fontSize =
-        "1em";
-
-}
-
-
-/* =====================================================
-   HIGH CONTRAST
-   ===================================================== */
-
-function toggleContrast() {
-
-    document.body.classList.toggle(
-        "high-contrast"
-    );
-
-
-    let button =
-        document.getElementById("contrastBtn");
-
-
-    if (
-        document.body.classList.contains(
-            "high-contrast"
-        )
-    ) {
-
-        button.innerText =
-            currentLanguage === "kn"
-                ? "☀️ ಸಾಮಾನ್ಯ ಮೋಡ್"
-                : "☀️ Normal Mode";
-
-    } else {
-
-        button.innerText =
-            currentLanguage === "kn"
-                ? "🌓 ಕಾಂಟ್ರಾಸ್ಟ್"
-                : "🌓 Contrast";
-    }
-
-}
-
-
-/* =====================================================
-   LANGUAGE
-   ===================================================== */
+// =====================================================
+// LANGUAGE
+// =====================================================
 
 function setLanguage(language) {
 
-    currentLanguage =
-        language;
+    currentLanguage = language;
 
 
     if (language === "kn") {
@@ -914,7 +511,7 @@ function setLanguage(language) {
             "EasyGov ಗೆ ಸ್ವಾಗತ";
 
         document.getElementById("loginDescription").innerText =
-            "ಪ್ರವೇಶಿಸಬಹುದಾದ ಸರ್ಕಾರಿ ಸೇವೆಗಳನ್ನು ಬಳಸಲು ಸೈನ್ ಇನ್ ಮಾಡಿ.";
+            "ಸುಲಭವಾದ ಸರ್ಕಾರಿ ಸೇವೆಗಳನ್ನು ಪಡೆಯಲು ಲಾಗಿನ್ ಮಾಡಿ.";
 
         document.getElementById("emailLabel").innerText =
             "ಇಮೇಲ್";
@@ -932,10 +529,10 @@ function setLanguage(language) {
             "ಸರ್ಕಾರಿ ಸೇವೆಗಳನ್ನು ಎಲ್ಲರಿಗೂ ಸುಲಭವಾಗಿಸಿ";
 
         document.getElementById("homeDescription").innerText =
-            "ಸರಳ ಹಂತಗಳ ಮೂಲಕ ಸರ್ಕಾರಿ ಫಾರ್ಮ್‌ಗಳನ್ನು ಪೂರ್ಣಗೊಳಿಸಿ.";
+            "ಎಲ್ಲರಿಗಾಗಿ ಸರಳ ಹಂತಗಳ ಮೂಲಕ ಸರ್ಕಾರಿ ಅರ್ಜಿಗಳನ್ನು ಪೂರ್ಣಗೊಳಿಸಿ.";
 
         document.getElementById("startButton").innerText =
-            "🚀 ಅರ್ಜಿಯನ್ನು ಪ್ರಾರಂಭಿಸಿ";
+            "🚀 ಅರ್ಜಿ ಪ್ರಾರಂಭಿಸಿ";
 
         document.getElementById("accessibilityTitle").innerText =
             "ಪ್ರವೇಶಿಸುವಿಕೆ ಆಯ್ಕೆಗಳು";
@@ -944,13 +541,10 @@ function setLanguage(language) {
             "ನಿಮ್ಮ ಅನುಭವವನ್ನು ವೈಯಕ್ತೀಕರಿಸಿ";
 
         document.getElementById("preferencesDescription").innerText =
-            "ವೆಬ್‌ಸೈಟ್ ಬಳಸಲು ಸುಲಭವಾಗುವ ಆಯ್ಕೆಗಳನ್ನು ಆರಿಸಿ.";
+            "ವೆಬ್‌ಸೈಟ್ ಬಳಸಲು ನಿಮಗೆ ಸುಲಭವಾಗುವ ಆಯ್ಕೆಗಳನ್ನು ಆರಿಸಿ.";
 
         document.getElementById("continueButton").innerText =
             "ಮುಂದುವರಿಸಿ →";
-
-        document.getElementById("readDescription").innerText =
-            "ಸೂಚನೆಗಳನ್ನು ಓದುವ ಬದಲು ಕೇಳಿ.";
 
         document.getElementById("reviewTitle").innerText =
             "ನಿಮ್ಮ ಮಾಹಿತಿಯನ್ನು ಪರಿಶೀಲಿಸಿ";
@@ -959,19 +553,13 @@ function setLanguage(language) {
             "ಪೂರ್ಣಗೊಳಿಸುವ ಮೊದಲು ನಿಮ್ಮ ಉತ್ತರಗಳನ್ನು ಪರಿಶೀಲಿಸಿ.";
 
         document.getElementById("completeTitle").innerText =
-            "ಮಾರ್ಗದರ್ಶಿತ ಫಾರ್ಮ್ ಪೂರ್ಣಗೊಂಡಿದೆ!";
+            "ಅರ್ಜಿಯ ಮಾಹಿತಿ ಪೂರ್ಣಗೊಂಡಿದೆ!";
 
         document.getElementById("completeDescription").innerText =
             "ನೀವು ಅಗತ್ಯವಿರುವ ಎಲ್ಲಾ ಮಾಹಿತಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಳಿಸಿದ್ದೀರಿ.";
 
         document.getElementById("noteText").innerText =
-            "ಈ ಪ್ರೋಟೋಟೈಪ್ ಪ್ರವೇಶಿಸಬಹುದಾದ ಮಾರ್ಗದರ್ಶಿತ ಫಾರ್ಮ್ ಅನ್ನು ಪ್ರದರ್ಶಿಸುತ್ತದೆ.";
-
-        document.getElementById("contrastBtn").innerText =
-            "🌓 ಕಾಂಟ್ರಾಸ್ಟ್";
-
-        document.getElementById("logoutButton").innerText =
-            "ಲಾಗ್‌ಔಟ್";
+            "ಈ ಮಾದರಿಯು ಸುಲಭವಾದ ಸರ್ಕಾರಿ ಅರ್ಜಿ ಪ್ರಕ್ರಿಯೆಯನ್ನು ತೋರಿಸುತ್ತದೆ.";
 
     } else {
 
@@ -1014,9 +602,6 @@ function setLanguage(language) {
         document.getElementById("continueButton").innerText =
             "Continue →";
 
-        document.getElementById("readDescription").innerText =
-            "Listen to instructions instead of reading them.";
-
         document.getElementById("reviewTitle").innerText =
             "Review Your Information";
 
@@ -1032,37 +617,536 @@ function setLanguage(language) {
         document.getElementById("noteText").innerText =
             "This prototype demonstrates an accessible guided form. Users can proceed to the official government portal for actual submission.";
 
-        document.getElementById("contrastBtn").innerText =
-            "🌓 Contrast";
-
-        document.getElementById("logoutButton").innerText =
-            "Logout";
     }
 
+
+    // If currently inside form, update question
 
     if (
         document
             .getElementById("formScreen")
-            .classList.contains("active")
+            .classList
+            .contains("active")
     ) {
 
-        loadQuestion();
+        displayQuestion();
 
     }
 
 }
 
 
-/* =====================================================
-   SECURITY HELPER
-   ===================================================== */
+// =====================================================
+// ACCESSIBILITY - TEXT SIZE
+// =====================================================
 
-function escapeHTML(value) {
+function changeTextSize(direction) {
 
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    textSize += direction * 0.1;
+
+
+    if (textSize < 0.8) {
+
+        textSize = 0.8;
+
+    }
+
+
+    if (textSize > 1.5) {
+
+        textSize = 1.5;
+
+    }
+
+
+    document.body.style.fontSize =
+        textSize + "em";
+
 }
+
+
+function resetTextSize() {
+
+    textSize = 1;
+
+    document.body.style.fontSize = "1em";
+
+}
+
+
+// =====================================================
+// HIGH CONTRAST
+// =====================================================
+
+function toggleContrast() {
+
+    document.body.classList.toggle("high-contrast");
+
+}
+
+
+// =====================================================
+// READ ALOUD
+// =====================================================
+
+function speakText(text) {
+
+    if (!("speechSynthesis" in window)) {
+
+        alert("Read Aloud is not supported in this browser.");
+
+        return;
+
+    }
+
+
+    window.speechSynthesis.cancel();
+
+
+    const speech =
+        new SpeechSynthesisUtterance(text);
+
+
+    if (currentLanguage === "kn") {
+
+        speech.lang = "kn-IN";
+
+    } else {
+
+        speech.lang = "en-US";
+
+    }
+
+
+    speech.rate = 0.9;
+
+    speech.pitch = 1;
+
+
+    window.speechSynthesis.speak(speech);
+
+}
+
+
+// READ CURRENT PAGE
+
+function readCurrentPage() {
+
+    let text = "";
+
+
+    const activeScreen =
+        document.querySelector(".screen.active");
+
+
+    if (activeScreen) {
+
+        text = activeScreen.innerText;
+
+    }
+
+
+    speakText(text);
+
+}
+
+
+// READ CURRENT QUESTION
+
+function readQuestion() {
+
+    const question =
+        questions[currentQuestion];
+
+
+    const title =
+        question.title[currentLanguage];
+
+    const description =
+        question.description[currentLanguage];
+
+
+    speakText(
+        title + ". " + description
+    );
+
+}
+
+
+// =====================================================
+// APPLICATION START
+// =====================================================
+
+function startApplication() {
+
+    showScreen("preferencesScreen");
+
+}
+
+
+// =====================================================
+// FORM START
+// =====================================================
+
+function beginForm() {
+
+    currentQuestion = 0;
+
+    formAnswers = {};
+
+    displayQuestion();
+
+    showScreen("formScreen");
+
+}
+
+
+// =====================================================
+// DISPLAY QUESTION
+// =====================================================
+
+function displayQuestion() {
+
+    const question =
+        questions[currentQuestion];
+
+
+    const total =
+        questions.length;
+
+
+    // Step
+
+    document.getElementById("stepText").innerText =
+
+        currentLanguage === "kn"
+
+            ? `ಹಂತ ${currentQuestion + 1} / ${total}`
+
+            : `Step ${currentQuestion + 1} of ${total}`;
+
+
+    // Percentage
+
+    const percent =
+        Math.round(
+            ((currentQuestion + 1) / total) * 100
+        );
+
+
+    document.getElementById("progressPercent").innerText =
+        percent + "%";
+
+
+    document.getElementById("progressFill").style.width =
+        percent + "%";
+
+
+    // Icon
+
+    document.getElementById("questionIcon").innerText =
+        question.icon;
+
+
+    // Title
+
+    document.getElementById("questionTitle").innerText =
+        question.title[currentLanguage];
+
+
+    // Description
+
+    document.getElementById("questionDescription").innerText =
+        question.description[currentLanguage];
+
+
+    // Input container
+
+    const container =
+        document.getElementById("inputContainer");
+
+
+    container.innerHTML = "";
+
+
+    let input;
+
+
+    // TEXT / DATE / TEL
+
+    if (
+        question.type === "text" ||
+        question.type === "date" ||
+        question.type === "tel"
+    ) {
+
+        input =
+            document.createElement("input");
+
+        input.type =
+            question.type;
+
+        input.placeholder =
+            question.placeholder[currentLanguage];
+
+    }
+
+
+    // SELECT
+
+    else if (question.type === "select") {
+
+        input =
+            document.createElement("select");
+
+
+        const defaultOption =
+            document.createElement("option");
+
+        defaultOption.value = "";
+
+        defaultOption.innerText =
+            question.placeholder[currentLanguage];
+
+        input.appendChild(defaultOption);
+
+
+        const list =
+            currentQuestion === 4
+                ? states
+                : services;
+
+
+        list.forEach(item => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = item;
+
+            option.innerText = item;
+
+            input.appendChild(option);
+
+        });
+
+    }
+
+
+    input.id = "currentAnswer";
+
+
+    // Restore previous answer
+
+    if (formAnswers[currentQuestion]) {
+
+        input.value =
+            formAnswers[currentQuestion];
+
+    }
+
+
+    container.appendChild(input);
+
+
+    // Back button
+
+    document.getElementById("backButton").style.visibility =
+
+        currentQuestion === 0
+            ? "hidden"
+            : "visible";
+
+
+    // Next button
+
+    document.getElementById("nextButton").innerText =
+
+        currentQuestion === total - 1
+
+            ? (currentLanguage === "kn"
+                ? "ಪರಿಶೀಲಿಸಿ →"
+                : "Review →")
+
+            : (currentLanguage === "kn"
+                ? "ಮುಂದೆ →"
+                : "Next →");
+
+}
+
+
+// =====================================================
+// NEXT QUESTION
+// =====================================================
+
+function nextQuestion() {
+
+    const input =
+        document.getElementById("currentAnswer");
+
+
+    if (!input.value.trim()) {
+
+        const message =
+            currentLanguage === "kn"
+                ? "ದಯವಿಟ್ಟು ಉತ್ತರವನ್ನು ನಮೂದಿಸಿ."
+                : "Please enter or select an answer.";
+
+        alert(message);
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    // Save answer
+
+    formAnswers[currentQuestion] =
+        input.value;
+
+
+    // Move next
+
+    if (
+        currentQuestion <
+        questions.length - 1
+    ) {
+
+        currentQuestion++;
+
+        displayQuestion();
+
+    } else {
+
+        showReview();
+
+    }
+
+}
+
+
+// =====================================================
+// PREVIOUS QUESTION
+// =====================================================
+
+function previousQuestion() {
+
+    if (currentQuestion > 0) {
+
+        const input =
+            document.getElementById("currentAnswer");
+
+
+        if (input) {
+
+            formAnswers[currentQuestion] =
+                input.value;
+
+        }
+
+
+        currentQuestion--;
+
+        displayQuestion();
+
+    }
+
+}
+
+
+// =====================================================
+// REVIEW
+// =====================================================
+
+function showReview() {
+
+    const container =
+        document.getElementById("reviewContainer");
+
+
+    container.innerHTML = "";
+
+
+    questions.forEach((question, index) => {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "review-item";
+
+
+        const label =
+            document.createElement("div");
+
+        label.className =
+            "review-label";
+
+        label.innerText =
+            question.title[currentLanguage];
+
+
+        const value =
+            document.createElement("div");
+
+        value.className =
+            "review-value";
+
+        value.innerText =
+            formAnswers[index] || "-";
+
+
+        item.appendChild(label);
+
+        item.appendChild(value);
+
+
+        container.appendChild(item);
+
+    });
+
+
+    showScreen("reviewScreen");
+
+}
+
+
+// =====================================================
+// COMPLETE APPLICATION
+// =====================================================
+
+function completeApplication() {
+
+    showScreen("completeScreen");
+
+}
+
+
+// =====================================================
+// RESTART
+// =====================================================
+
+function restartApplication() {
+
+    currentQuestion = 0;
+
+    formAnswers = {};
+
+    showScreen("homeScreen");
+
+}
+
+
+// =====================================================
+// STARTUP
+// =====================================================
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    // Default language
+
+    currentLanguage = "en";
+
+});
